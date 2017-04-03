@@ -106,5 +106,21 @@ var schema = bigquery.Schema{
 }
 ```
 
+Installation
 
+```console
+go get -u github.com/ceocoder/json2go
+```
 
+Supported BigQuery Field Types
+
+* BYTES
+* BOOLEAN
+* INTEGER
+* RECORD
+* STRING
+* FLOAT
+* TIMESTAMP
+* DATE
+* TIME
+* DATETIME

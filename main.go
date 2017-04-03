@@ -29,7 +29,7 @@ BigQuery JSON schema to Go schema converter
 
 Version %s
 
-json2bq provides support for converting BigQuery schema from JSON to Go structs
+json2go provides support for converting BigQuery schema from JSON to Go structs
 
     json2bq [flags=value]
 
@@ -96,20 +96,27 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to read file %v", err)
 	}
-	schema, err := parseSchema(dat)
-
+	structs, err := BuildStructsFromBQJSON(string(dat))
 	if err != nil {
 		log.Fatalf("Failed to build Go var for %s - reason %v", schemaFile, err)
+	} else {
+		fmt.Println(structs)
 	}
+}
+
+// BuildStructsFromBQJSON function takes valid BigQuery schema as JSON string
+// and returns Go code (including imports and package name) as string
+func BuildStructsFromBQJSON(jsonSchema string) (string, error) {
+	schema, err := parseSchema([]byte(jsonSchema))
 	bt, err := buildGoStructs(schema, 0)
 	if err != nil {
 		log.Fatalf("unable to build Go stuct %v", err)
 	}
-	if b, err := format.Source(bt); err != nil {
-		log.Fatalf("failed - %s - %s", err, (string(bt)))
-	} else {
-		fmt.Println(string(b))
+	b, err := format.Source(bt)
+	if err != nil {
+		return "", fmt.Errorf("failed - %s - %s", err, (string(bt)))
 	}
+	return string(b), nil
 }
 
 func parseSchema(data []byte) ([]jsonField, error) {
