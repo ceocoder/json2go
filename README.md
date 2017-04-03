@@ -1,6 +1,6 @@
 # json2go
 
-[![Travis CI]https://travis-ci.org/ceocoder/json2go.svg?branch=master)](https://travis-ci.org/ceocoder/json2go)]
+[![Travis CI](https://travis-ci.org/ceocoder/json2go.svg?branch=master)](https://travis-ci.org/ceocoder/json2go)
 
 BigQuery JSON Schema to Go schema converter
 
