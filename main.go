@@ -13,6 +13,7 @@ import (
 )
 
 const (
+	// BANNER is what is printed for help/info output
 	BANNER = `
 
   ____  _        ____                               _  _____  ____  _   _            ___              _____  ____
@@ -62,6 +63,7 @@ var Schema = bigquery.Schema{
         },
 }
 `
+	// VERSION of the tool
 	VERSION            = "v0.0.1"
 	defaultPackageName = "main"
 )
@@ -112,12 +114,11 @@ func main() {
 
 func parseSchema(data []byte) ([]jsonField, error) {
 	schema := []jsonField{}
-
-	if err := json.Unmarshal(data, &schema); err == nil {
+	err := json.Unmarshal(data, &schema)
+	if err == nil {
 		return schema, nil
-	} else {
-		return nil, fmt.Errorf("failed parse schema %s", err)
 	}
+	return nil, fmt.Errorf("failed parse schema %s", err)
 }
 
 func buildGoStructs(schema []jsonField, depth int) ([]byte, error) {
@@ -143,9 +144,8 @@ func buildGoStructs(schema []jsonField, depth int) ([]byte, error) {
 			sub, err := buildGoStructs(field.Fields, depth+1)
 			if err != nil {
 				return nil, err
-			} else {
-				buf.WriteString(fmt.Sprintf("Schema: bigquery.Schema{\n %s", string(sub)))
 			}
+			buf.WriteString(fmt.Sprintf("Schema: bigquery.Schema{\n %s", string(sub)))
 			buf.WriteString("},\n")
 		}
 		buf.WriteString("},\n")
